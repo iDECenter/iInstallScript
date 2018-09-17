@@ -14,6 +14,8 @@ installDocker() {
 installDependencies() {
     # first, docker
     command -v docker >/dev/null 2>&1 || installDocker
+
+    sudo apt-get install nodejs git # in case ...
 }
 
 installServer() {
@@ -45,3 +47,16 @@ echo "WARNING: this script works on ubuntu only (now)"
 installDependencies
 installServer
 
+while true; do
+    read -p "build docker image now(Y) or use pre-built image(N, default)?" c
+
+    if [[ $c == "Y" || $c == "y" ]]; then
+        makeDockerImage
+        break
+    fi
+
+    if [[ $c == "N" || $c == "n" || $c == "" ]]; then
+        echo "use pre-built image"
+        break
+    fi
+done
