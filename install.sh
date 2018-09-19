@@ -26,7 +26,7 @@ installDependencies() {
     sudo apt-get update
     sudo apt-get -y install dotnet-sdk-2.1
 
-    sudo apt-get install -y nodejs git # in case ...
+    sudo apt-get install -y nodejs npm git # in case ...
 }
 
 installServer() {
