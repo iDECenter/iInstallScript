@@ -70,6 +70,15 @@ installDaemon() {
     dotnet build iDaemonCenter/iDaemonCenter/iDaemonCenter.csproj -o ../..
 }
 
+makeTemplates() {
+    echo "::::making templates"
+
+    cd template
+    chmod +x get_mbed_wb.sh
+    ./get_mbed_wb.sh
+    cd ..
+}
+
 echo "::::WARNING: this script works on ubuntu only (now)"
 installDependencies
 installServer
@@ -90,3 +99,4 @@ while true; do
 done
 
 installDaemon
+makeTemplates
