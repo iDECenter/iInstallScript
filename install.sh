@@ -6,7 +6,7 @@ installDocker() {
     sudo add-apt-repository "deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
     sudo apt-get update
     sudo apt-get install -y docker-ce
-    sudo useradd $username -a -G docker
+    sudo usermod -a -G docker $username
     echo "docker installed, you may need reboot to use it."
 }
 
@@ -26,7 +26,7 @@ installDependencies() {
     sudo apt-get update
     sudo apt-get -y install dotnet-sdk-2.1
 
-    sudo apt-get install -y nodejs npm git # in case ...
+    sudo apt-get install -y nodejs npm git python-pip gcc-arm-none-eabi mercurial # in case ...
 }
 
 installServer() {
@@ -72,10 +72,19 @@ installDaemon() {
 
 makeTemplates() {
     echo "::::making templates"
+    
+    r=$(pwd)
+    cd /usr/local
+    sudo wget "http://geminilab.moe/static/gcc-arm-none-eabi.tar.bz2"
+    sudo tar xf gcc-arm-none-eabi.tar.bz2
+    sudo rm gcc-arm-none-eabi.tar.bz2
+    gccarmpath=$(ls -l | egrep ^d.*gcc.*$ | awk '{print $NF}')
+    export PATH=/usr/local/$gccarmpath/bin:$PATH
+    sudo bash -c "echo \"export PATH=/usr/local/$gccarmpath/bin:\\\$PATH\" >> /etc/profile"
+    cd $r
 
     cd template
-    chmod +x get_mbed_wb.sh
-    ./get_mbed_wb.sh
+    bash get_mbed_wb.sh
     cd ..
 }
 
