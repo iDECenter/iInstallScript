@@ -22,6 +22,12 @@ run() {
     fi
 }
 
+viconf() {
+    VI=vim
+    command -v vim --version > /dev/null 2>&1 || VI=vi
+    $VI iDECenter/config.json
+}
+
 dispUsage() {
     echo "$0"
     echo
@@ -30,6 +36,9 @@ dispUsage() {
     echo
     echo "$0 run"
     echo "    run iDECenter"
+    echo
+    echo "$0 viconf"
+    echo "    edit iDECenter configuration file"
     echo
     echo "$0 [help|usage]"
     echo "    display usage"
@@ -43,6 +52,7 @@ unknownCommand() {
 case "$1" in
     "install") install;;
     "run") run;;
+    "viconf") viconf;;
     "help") ;&
     "usage") ;&
     "") dispUsage;;
