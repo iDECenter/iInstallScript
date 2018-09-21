@@ -93,10 +93,6 @@ makeTemplates() {
     cd ..
 }
 
-writeScripts() {
-    curl https://raw.githubusercontent.com/iDECenter/iInstallScript/master/idec.sh > idec
-}
-
 echo "::::WARNING: this script works on ubuntu 18.04 only (now)"
 echo "::::WARNING: DO NOT run this script as root"
 installDependencies
@@ -114,4 +110,4 @@ fi
 installDaemon
 makeTemplates
 
-writeScripts
+cd ..
