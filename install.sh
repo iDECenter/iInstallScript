@@ -27,6 +27,7 @@ installDependencies() {
     sudo apt-get -y install dotnet-sdk-2.1
 
     sudo apt-get install -y nodejs npm git python-pip gcc-arm-none-eabi mercurial # in case ...
+    sudo apt-get remove -y gcc-arm-none-eabi
 }
 
 installServer() {
@@ -70,9 +71,7 @@ installDaemon() {
     dotnet build iDaemonCenter/iDaemonCenter/iDaemonCenter.csproj -o ../..
 }
 
-makeTemplates() {
-    echo "::::making templates"
-    
+installArmGcc() {
     r=$(pwd)
     cd /usr/local
     sudo wget "http://geminilab.moe/static/gcc-arm-none-eabi.tar.bz2"
@@ -82,30 +81,37 @@ makeTemplates() {
     export PATH=/usr/local/$gccarmpath/bin:$PATH
     sudo bash -c "echo \"export PATH=/usr/local/$gccarmpath/bin:\\\$PATH\" >> /etc/profile"
     cd $r
+}
+
+makeTemplates() {
+    echo "::::making templates"
+    
+    command -v arm-none-eabi-gcc --version >/dev/null 2>&1 || installArmGcc
 
     cd template
     bash get_mbed_wb.sh
     cd ..
 }
 
-echo "::::WARNING: this script works on ubuntu only (now)"
+writeScripts() {
+    curl https://raw.githubusercontent.com/iDECenter/iInstallScript/master/idec.sh > idec
+}
+
+echo "::::WARNING: this script works on ubuntu 18.04 only (now)"
+echo "::::WARNING: DO NOT run this script as root"
 installDependencies
 installServer
 cd iDECenter
 
-while true; do
-    read -p "::::build docker image now(Y) or use pre-built image(N, default)?" c
+read -p "::::build docker image now(Y) or use pre-built image(N, default)?" c
 
-    if [[ $c == "Y" || $c == "y" ]]; then
-        makeDockerImage
-        break
-    fi
-
-    if [[ $c == "N" || $c == "n" || $c == "" ]]; then
-        echo "::::use pre-built image"
-        break
-    fi
-done
+if [[ $c == "Y" || $c == "y" ]]; then
+    makeDockerImage
+else
+    echo "::::use pre-built image"
+fi
 
 installDaemon
 makeTemplates
+
+writeScripts
