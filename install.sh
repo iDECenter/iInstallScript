@@ -26,7 +26,7 @@ installDependencies() {
     sudo apt-get update
     sudo apt-get upgrade -y
 
-    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common liblttng-ust0 libcurl3 libssl1.0.0 libkrb5-3 zlib1g
+    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common liblttng-ust0 libcurl4 libssl1.0.0 libkrb5-3 zlib1g
     sudo apt-get install -y nodejs npm git python-pip gcc-arm-none-eabi mercurial # in case ...
     sudo apt-get remove -y gcc-arm-none-eabi
 
