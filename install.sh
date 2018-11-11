@@ -1,8 +1,10 @@
 username=`whoami`
+dir=`pwd`
+GET="curl -fsSL"
 set -e
 
 installDocker() {
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    $GET https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo add-apt-repository "deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
     sudo apt-get update
     sudo apt-get install -y docker-ce
@@ -10,24 +12,25 @@ installDocker() {
     echo "docker installed, you may need reboot to use it."
 }
 
+installDotnet() {
+    $GET https://dot.net/v1/dotnet-install.sh > ./dotnet-install.sh
+    ./dotnet-install.sh -v 2.1.403 -i $dir/.dotnet
+}
+
 installDependencies() {
     sudo apt-get update
     sudo apt-get upgrade -y
 
+    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common liblttng-ust0 libcurl3 libssl1.0.0 libkrb5-3 zlib1g
+    sudo apt-get install -y nodejs npm git python-pip gcc-arm-none-eabi mercurial # in case ...
+    sudo apt-get remove -y gcc-arm-none-eabi
+
     # first, docker
-    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
     command -v docker >/dev/null 2>&1 || installDocker
 
     # then dotnet
-    wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
-    sudo dpkg -i packages-microsoft-prod.deb
-    rm packages-microsoft-prod.deb
-    sudo apt-get -y install apt-transport-https
-    sudo apt-get update
-    sudo apt-get -y install dotnet-sdk-2.1
-
-    sudo apt-get install -y nodejs npm git python-pip gcc-arm-none-eabi mercurial # in case ...
-    sudo apt-get remove -y gcc-arm-none-eabi
+    [[ -d .dotnet ]] || installDocker
+    command -v dotnet >/dev/null 2>&1 || installDotnet
 }
 
 installServer() {

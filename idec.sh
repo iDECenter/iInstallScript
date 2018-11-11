@@ -1,5 +1,8 @@
 #!/bin/bash
 
+DIR="$(cd `dirname $0`; pwd)"
+BEGIN=`date "+%Y.%m.%d-%H:%M:%S"`
+
 install() {
     curl https://raw.githubusercontent.com/iDECenter/iInstallScript/master/install.sh > install.sh
     chmod +x install.sh
@@ -8,12 +11,11 @@ install() {
 
 run() {
     if [[ -d iDECenter ]]; then
-        starttime=`date "+%Y.%m.%d-%H:%M:%S"`
         cd iDECenter
         npm start
         echo "server exited with code $?"
         mkdir ../logs/ > /dev/null 2>&1
-        mv logall.log ../logs/log_$starttime.log
+        mv logall.log ../logs/log_$BEGIN.log
 
         exit 0
     else
@@ -28,6 +30,23 @@ viconf() {
     $VI iDECenter/config.json
 }
 
+dbbackup() {
+    cp iDECenter/db.sqlite3 db.sqlite3.$BEGIN
+}
+
+makeDaemon() {
+    dotnet build iDECenter/iDaemonCenter/iDaemonCenter/iDaemonCenter.csproj -o ../.. -c Release
+}
+
+upgrade() {
+    cd iDECenter
+    git pull
+    cd iDaemonCenter
+    git pull
+    cd ../..
+    makeDaemon
+}
+
 dispUsage() {
     echo "$0"
     echo
@@ -40,6 +59,12 @@ dispUsage() {
     echo "$0 viconf"
     echo "    edit iDECenter configuration file"
     echo
+    echo "$0 dbbackup"
+    echo "    backup the database"
+    echo
+    echo "$0 upgrade"
+    echo "    upgrade the project"
+    echo
     echo "$0 [help|usage]"
     echo "    display usage"
 }
@@ -49,10 +74,13 @@ unknownCommand() {
     exit 1
 }
 
+cd $DIR
 case "$1" in
     "install") install;;
     "run") run;;
     "viconf") viconf;;
+    "dbbackup") dbbackup;;
+    "upgrade") upgrade;;
     "help") ;&
     "usage") ;&
     "") dispUsage;;
