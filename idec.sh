@@ -41,6 +41,11 @@ makeDaemon() {
     dotnet build iDECenter/iDaemonCenter/iDaemonCenter/iDaemonCenter.csproj -o ../.. -c Release
 }
 
+upgradeSelf() {
+    curl https://raw.githubusercontent.com/iDECenter/iInstallScript/master/idec.sh > $0
+    chmod +x $0
+}
+
 upgrade() {
     cd iDECenter
     git pull
@@ -64,6 +69,9 @@ dispUsage() {
     echo
     echo "$0 dbbackup"
     echo "    backup the database"
+    echo
+    echo "$0 upgradeself"
+    echo "   upgrade this script itself"
     echo
     echo "$0 upgrade"
     echo "    upgrade the project"
