@@ -2,6 +2,7 @@
 
 DIR="$(cd `dirname $0`; pwd)"
 BEGIN=`date "+%Y.%m.%d-%H:%M:%S"`
+DOTNET_PATH=".dotnet"
 
 install() {
     curl https://raw.githubusercontent.com/iDECenter/iInstallScript/master/install.sh > install.sh
@@ -10,6 +11,7 @@ install() {
 }
 
 run() {
+    export PATH=$PATH:$DIR/$DOTNET_PATH
     if [[ -d iDECenter ]]; then
         cd iDECenter
         npm start
