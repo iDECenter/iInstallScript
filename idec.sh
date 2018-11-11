@@ -91,6 +91,7 @@ case "$1" in
     "run") run;;
     "viconf") viconf;;
     "dbbackup") dbbackup;;
+    "upgradeself") upgradeSelf;;
     "upgrade") upgrade;;
     "help") ;&
     "usage") ;&
