@@ -22,7 +22,7 @@ run() {
 
         exit 0
     else
-        echo "iDECenter not installed"
+        echo "iDECenter not installed!!!"
         exit 1
     fi
 }
