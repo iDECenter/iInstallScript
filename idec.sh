@@ -71,7 +71,7 @@ dispUsage() {
     echo "    backup the database"
     echo
     echo "$0 upgradeself"
-    echo "   upgrade this script itself"
+    echo "    upgrade this script itself"
     echo
     echo "$0 upgrade"
     echo "    upgrade the project"
