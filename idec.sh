@@ -1,5 +1,6 @@
 #!/bin/bash
 
+GET="curl -fsSL"
 DIR="$(cd `dirname $0`; pwd)"
 BEGIN=`date "+%Y.%m.%d-%H:%M:%S"`
 DOTNET_PATH=".dotnet"
@@ -7,7 +8,7 @@ DOTNET_PATH=".dotnet"
 export PATH=$PATH:$DIR/$DOTNET_PATH
 
 install() {
-    curl https://raw.githubusercontent.com/iDECenter/iInstallScript/master/install.sh > install.sh
+    $GET https://raw.githubusercontent.com/iDECenter/iInstallScript/master/install.sh > install.sh
     chmod +x install.sh
     ./install.sh
 }
@@ -42,7 +43,7 @@ makeDaemon() {
 }
 
 upgradeSelf() {
-    curl https://raw.githubusercontent.com/iDECenter/iInstallScript/master/idec.sh > $0
+    $GET https://raw.githubusercontent.com/iDECenter/iInstallScript/master/idec.sh > $0
     chmod +x $0
 }
 

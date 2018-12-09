@@ -1,5 +1,5 @@
 username=`whoami`
-dir=`pwd`
+DIR="$(cd `dirname $0`; pwd)"
 GET="curl -fsSL"
 DOTNET_PATH=".dotnet"
 set -e
@@ -16,11 +16,11 @@ installDocker() {
 installDotnet() {
     $GET https://dot.net/v1/dotnet-install.sh > ./dotnet-install.sh
     chmod +x dotnet-install.sh
-    ./dotnet-install.sh -v 2.1.403 -i $dir/$DOTNET_PATH
+    ./dotnet-install.sh -v 2.1.403 -i $DIR/$DOTNET_PATH
 }
 
 addDotnetToPath() {
-    export PATH=$dir/$DOTNET_PATH:$PATH
+    export PATH=$DIR/$DOTNET_PATH:$PATH
 }
 
 installDependencies() {
