@@ -7,10 +7,17 @@ DOTNET_PATH=".dotnet"
 
 export PATH=$PATH:$DIR/$DOTNET_PATH
 
+buildProj() {
+    cd iDECenter
+    npm install
+    npm run build
+}
+
 install() {
     $GET https://raw.githubusercontent.com/iDECenter/iInstallScript/master/install.sh > install.sh
     chmod +x install.sh
     ./install.sh
+    buildProj
 }
 
 run() {
@@ -54,6 +61,7 @@ upgrade() {
     git pull
     cd ../..
     makeDaemon
+    buildProj
 }
 
 dispUsage() {
